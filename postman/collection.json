@@ -1,0 +1,453 @@
+{
+  "info": {
+    "_postman_id": "a578ab2e-cfb4-4357-a355-b35eb4d7e5b5",
+    "name": "Aminkhishig — DummyJSON",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "54553647",
+    "_collection_link": "https://go.postman.co/collection/54553647-a578ab2e-cfb4-4357-a355-b35eb4d7e5b5?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status 200\", () => {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response time < 1s\", () => {\r",
+                  "    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Content-Type is JSON\", () => {\r",
+                  "    pm.response.to.have.header(\"Content-Type\");\r",
+                  "    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Token exists and is string\", () => {\r",
+                  "    const d = pm.response.json();\r",
+                  "    pm.expect(d).to.have.property(\"accessToken\"); // token → accessToken\r",
+                  "    pm.expect(d.accessToken).to.be.a(\"string\");\r",
+                  "});\r",
+                  "\r",
+                  "const json = pm.response.json();\r",
+                  "pm.environment.set(\"token\", json.accessToken); // json.token → json.accessToken\r",
+                  "pm.environment.set(\"userId\", json.id);\r",
+                  "\r",
+                  "pm.test(\"userId is a number\", () => {\r",
+                  "    const d = pm.response.json();\r",
+                  "    pm.expect(d.id).to.be.a(\"number\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"username\": \"emilys\",\r\n  \"password\": \"emilyspass\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get My Profile",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status 200\", () => {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response time < 1s\", () => {\r",
+                  "    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Email format valid\", () => {\r",
+                  "    const d = pm.response.json();\r",
+                  "    pm.expect(d).to.have.property(\"email\");\r",
+                  "    pm.expect(d.email).to.be.a(\"string\").and.match(/@/);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Username exists\", () => {\r",
+                  "    const d = pm.response.json();\r",
+                  "    pm.expect(d).to.have.property(\"username\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/auth/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "me"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete post",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status 200 on delete\", () => {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response time < 1s\", () => {\r",
+                  "    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Deleted post has isDeleted flag\", () => {\r",
+                  "    const d = pm.response.json();\r",
+                  "    pm.expect(d).to.have.property(\"isDeleted\");\r",
+                  "    pm.expect(d.isDeleted).to.be.true;\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/posts/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "posts",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get User by ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status 200\", () => {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response under 1s\", () => {\r",
+                  "    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Has id and email\", () => {\r",
+                  "    const d = pm.response.json();\r",
+                  "    pm.expect(d).to.have.property(\"id\");\r",
+                  "    pm.expect(d).to.have.property(\"email\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"id is a number\", () => {\r",
+                  "    const d = pm.response.json();\r",
+                  "    pm.expect(d.id).to.be.a(\"number\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Email format valid\", () => {\r",
+                  "    const d = pm.response.json();\r",
+                  "    pm.expect(d.email).to.match(/@/);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Content-Type is JSON\", () => {\r",
+                  "    pm.response.to.have.header(\"Content-Type\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/1?",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "1"
+              ],
+              "query": [
+                {
+                  "key": "",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get all Users",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status 200\", () => {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response time < 1s\", () => {\r",
+                  "    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Users array exists\", () => {\r",
+                  "    const d = pm.response.json();\r",
+                  "    // DummyJSON: { users: [...], total: 0, skip: 0, limit: 0 }\r",
+                  "    pm.expect(d).to.have.property(\"users\");\r",
+                  "    pm.expect(d.users).to.be.an(\"array\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"First user has id and email\", () => {\r",
+                  "    const d = pm.response.json();\r",
+                  "    pm.expect(d.users[0]).to.have.property(\"id\");\r",
+                  "    pm.expect(d.users[0]).to.have.property(\"email\");\r",
+                  "    pm.expect(d.users[0].id).to.be.a(\"number\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "User not found",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// URL: {{baseUrl}}/users/999999\r",
+                  "\r",
+                  "pm.test(\"Status 404 for non-existent user\", () => {\r",
+                  "    pm.response.to.have.status(404);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Error message exists\", () => {\r",
+                  "    const d = pm.response.json();\r",
+                  "    pm.expect(d).to.have.property(\"message\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/999999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "999999"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Posts",
+      "item": [
+        {
+          "name": "Create post",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Random title үүсгэх (Pre-request script)\r",
+                  "pm.environment.set(\"randomTitle\", \"Test post \" + Math.floor(Math.random() * 10000));"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status 201\", () => {\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"New post has id\", () => {\r",
+                  "    const d = pm.response.json();\r",
+                  "    pm.expect(d).to.have.property(\"id\");\r",
+                  "    pm.expect(d.id).to.be.a(\"number\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Title matches sent value\", () => {\r",
+                  "    const d = pm.response.json();\r",
+                  "    pm.expect(d).to.have.property(\"title\");\r",
+                  "    pm.expect(d.title).to.be.a(\"string\");\r",
+                  "});\r",
+                  "\r",
+                  "// Chain: post id хадгалах\r",
+                  "pm.environment.set(\"postId\", pm.response.json().id);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"title\": \"My Test Post\",\r\n  \"body\": \"This is a test post body\",\r\n  \"userId\": 1,\r\n  \"tags\": [\"test\", \"api\"],\r\n  \"reactions\": 0\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/posts/add",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "posts",
+                "add"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Post",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status 200\", () => {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Updated title exists\", () => {\r",
+                  "    const d = pm.response.json();\r",
+                  "    pm.expect(d).to.have.property(\"title\");\r",
+                  "    pm.expect(d.title).to.be.a(\"string\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"title\": \"Updated Post Title\",\r\n  \"body\": \"This post has been updated\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/posts/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "posts",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
